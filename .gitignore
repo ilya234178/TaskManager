@@ -1,3 +1,14 @@
+# venv
 venv/
-__pycache__/
 .env
+
+# python
+__pycache__/
+*.pyc
+
+# tests
+.pytest_cache/
+
+# editors
+.vscode/
+.idea/
