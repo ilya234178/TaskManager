@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict
 
 class TaskCreate(BaseModel):
     title: str
-    user_id: int
+    
 
 class TaskRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)

@@ -27,10 +27,11 @@ def create_task(db: Session, title: str, user_id: int) -> Task:
 def update_task(
     db: Session,
     task_id: int,
+    user_id: int,
     title: str | None = None,
     is_done: bool | None = None,
 ) -> Task:
-    task = db.get(Task, task_id)
+    task = db.query(Task).filter(Task.id == task_id, Task.user_id == user_id).first()
     if task is None:
         raise ValueError("not_found")
 
@@ -44,8 +45,8 @@ def update_task(
     return task
 
 
-def delete_task(db: Session, task_id: int) -> None:
-    task = db.get(Task, task_id)
+def delete_task(db: Session, task_id: int, user_id: int) -> None:
+    task = db.query(Task).filter(Task.id == task_id, Task.user_id == user_id).first()
     if task is None:
         raise ValueError("not_found")
 
