@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, EmailStr, ConfigDict
 
 class UserCreate(BaseModel):
@@ -8,3 +9,6 @@ class UserRead(BaseModel):
 
     id: int
     email: EmailStr
+
+class UserUpdate(BaseModel):
+    email : Optional[EmailStr] = None

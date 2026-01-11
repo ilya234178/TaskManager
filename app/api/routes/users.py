@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.db.deps import get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, UserRead
+from app.schemas.user import UserCreate, UserRead, UserUpdate
 from app.services import users as user_service 
 
 router = APIRouter(tags=["users"])
@@ -39,3 +39,14 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
                 detail="User not found",
             )
         raise 
+
+@router.patch("/users/{user_id}", response_model=UserRead)
+def patch_user(user_id: int, payload: UserUpdate, db: Session = Depends(get_db)):
+    try:
+        return user_service.update_user(db, user_id=user_id, email=payload.email)
+    except ValueError as e:
+        if str(e) == "not_found":
+            raise HTTPException(status_code=404, detail="User not found")
+        if str(e) == "duplicate_email":
+            raise HTTPException(status_code=409, detail="User with this email already exists")
+        raise

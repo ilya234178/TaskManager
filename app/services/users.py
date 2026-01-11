@@ -25,3 +25,20 @@ def delete_user(db: Session, user_id: int) -> None:
 
     db.delete(user)
     db.commit()
+
+def update_user(db: Session, user_id: int, email: str) -> User:
+    user = db.get(User, user_id)
+    if user is None:
+        raise ValueError("not_found")
+    
+    if email is not None:
+        user.email = email
+
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise ValueError("duplicate_email")
+    
+    db.refresh(user)
+    return user
